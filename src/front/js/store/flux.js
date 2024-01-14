@@ -2,18 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			token: null
+			
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -22,6 +12,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMessage: async () => {
+				console.log ('Hola post')
 				try{
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
@@ -46,6 +37,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			postLogin : async (infoUser) => {
+				try{
+					// fetching data from the backend
+					console.log ('Hola post')
+					console.log(infoUser)
+					const resp = await fetch(process.env.BACKEND_URL + "api/token", {
+						method: 'POST',
+						body: JSON.stringify(infoUser), 
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					})
+					const data = await resp.json()
+					console.log ('Hola data')
+					console.log(data)
+					setStore({ token: data.token })
+					localStorage.setItem('token', data.token);
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
 			}
 		}
 	};
