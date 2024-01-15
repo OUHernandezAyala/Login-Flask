@@ -4,20 +4,20 @@ import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 export const Home = () => {
-    const { store, actions } = useContext(Context);
+    const { store, actions:{protectedInfo} } = useContext(Context);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const data = () => {
-            if (store.token) {
-                actions.protectedInfo(store.token);
-            }
-            setLoading(false);
-        };
-
         data();
 
-    }, [store.token, actions]);
+    }, [store.token,protectedInfo]);
+
+    const data = () => {
+        if (store.token) {
+            protectedInfo(store.token);
+        }
+        setLoading(false);
+    };
 
     return (
         <div className="text-center mt-5">

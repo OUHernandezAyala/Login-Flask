@@ -21,7 +21,8 @@ export const Singup = () => {
     const handleSingup = async (event) => {
         event.preventDefault(); 
         console.log(newUser)
-           // const data = await actions.postNewUser(newUser);
+        const data = await actions.postNewUser(newUser);
+        console.log(data)
     };
 
 

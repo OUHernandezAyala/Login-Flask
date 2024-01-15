@@ -96,7 +96,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(newUser)
 					const resp = await fetch(process.env.BACKEND_URL + "api/users", {
 						method: 'POST',
-						body: JSON.stringify(infoUser), 
+						body: JSON.stringify(newUser), 
 						headers: {
 							'Content-Type': 'application/json'
 						}
