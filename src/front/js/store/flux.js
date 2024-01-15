@@ -2,7 +2,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			token: null
+			token: null,
+			infoProtected:{
+
+			}
 			
 		},
 		actions: {
@@ -59,7 +62,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
-			}
+			},
+			protectedInfo: async (token) => {
+				try {
+					// fetching data from the backend
+					console.log('Hola get');
+					console.log(token);
+			
+					const resp = await fetch(process.env.BACKEND_URL + "api/protected", {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${token}`
+						}
+					});
+			
+					const data = await resp.json();
+					console.log('Hola data');
+					console.log(data);
+	
+					if (data) {
+						setStore({ infoProtected: data });
+					}
+					return data;
+				} catch (error) {
+					console.log("Error loading message from backend", error);
+				}
+			},
+			postNewUser : async (newUser) => {
+				try{
+					// fetching data from the backend
+					console.log ('Hola post')
+					console.log(newUser)
+					const resp = await fetch(process.env.BACKEND_URL + "api/users", {
+						method: 'POST',
+						body: JSON.stringify(infoUser), 
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					})
+					const data = await resp.json()
+					console.log ('Hola data')
+					console.log(data)
+					return data;
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+			},
 		}
 	};
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
@@ -17,11 +17,17 @@ export const Login = () => {
         }));
     };
 
-    const login = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault(); 
-        console.log(infoUser)
-        actions.postLogin(infoUser);
-        console.log(store.token);
+        try {
+            const data = await actions.postLogin(infoUser);
+            if (data && data.token) {
+                await actions.protectedInfo(data.token);
+                console.log(store.token);
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+        }
     };
 
     return (
@@ -35,7 +41,7 @@ export const Login = () => {
                     <label htmlFor="password" className="form-label">Password</label>
                     <input type="password" className="form-control" id="password" onChange={handleChange}/>
                 </div>
-                <button  className="btn btn-primary" onClick={login}>Submit</button>  
+                <button className="btn btn-primary" onClick={handleLogin}>Submit</button>  
             </form>
             <Link to="/" className="mt-3">
                 <button className="btn btn-primary">Back home</button>
@@ -43,3 +49,5 @@ export const Login = () => {
         </div>
     );
 };
+
+
