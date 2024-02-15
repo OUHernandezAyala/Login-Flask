@@ -1,7 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+	const navigate = useNavigate()
+	const handelLogout = () =>{
+		localStorage.removeItem("token")
+		navigate("/")
+	}
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -15,6 +20,9 @@ export const Navbar = () => {
 					<Link to="/login">
 						<button className="btn btn-primary mx-1">Login</button>
 					</Link>
+					<button className="btn btn-primary mx-1" onClick={handelLogout}>
+						Logout
+					</button>
 				</div>
 			</div>
 		</nav>

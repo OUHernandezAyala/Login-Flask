@@ -1,9 +1,11 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import { Context } from "../store/appContext";
 
 export const Login = () => {
-    const { store, actions } = useContext(Context);
+    const { actions } = useContext(Context);
+    const navigate = useNavigate(); 
+
     const [infoUser, setinfoUser] = useState({
         email: "",
         password: ""
@@ -23,7 +25,8 @@ export const Login = () => {
             const data = await actions.postLogin(infoUser);
             if (data && data.token) {
                 await actions.protectedInfo(data.token);
-                console.log(store.token);
+                console.log(localStorage.getItem("token"));
+                navigate("/protected"); // Use navigate function to redirect
             }
         } catch (error) {
             console.error("Error during login:", error);

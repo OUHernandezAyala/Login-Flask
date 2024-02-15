@@ -56,7 +56,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					console.log ('Hola data')
 					console.log(data)
-					setStore({ token: data.token })
 					localStorage.setItem('token', data.token);
 					return data;
 				}catch(error){

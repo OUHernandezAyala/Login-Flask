@@ -46,16 +46,22 @@ def singup ():
         user_exist = User.query.filter_by(email=data.get("email")).one_or_none()
         if user_exist is None:
             return jsonify({"message":"User not exist"}), 400
-        password = data.get("password") + user_exist.pepper
-        hash_password = user_exist.password_hashed
-        validation_password = check_password_hash(hash_password, password)
-        print(validation_password)
-        if validation_password:
-            token = create_access_token(identity= user_exist.id)        
-            return jsonify({"message":"Authentication successful",
-                            "token": token}), 201
-        else:
-            return jsonify({"message":"Incorrect Pasword"}), 401
+        try:
+            password = data.get("password") + user_exist.pepper
+            hash_password = user_exist.password_hashed
+            validation_password = check_password_hash(hash_password, password)
+            print(validation_password)
+            if validation_password:
+                token = create_access_token(identity= user_exist.id)        
+                return jsonify({"message":"Authentication successful",
+                                "token": token}), 201
+            else:
+                return jsonify({"message":"Incorrect Pasword"}), 401
+        except Exception as error:
+            db.session.rollback()
+            print(error)
+            return jsonify({"message": "Server error"}), 500
+
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
